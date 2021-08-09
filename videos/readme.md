@@ -1,0 +1,1 @@
+Here is an image of the unit and what assembled looks like. Unfortunately videos are hard to film due to the brightness of the LED and flashing, Refer to the main readme for details of what flashing patterns exist
