@@ -560,7 +560,7 @@ void BWPulse(){  //pulsing from blue to bright white
           //13d = white pulse
           //13n = white pulse
 //50d / 50n - mist/fog
-          //50d = grey
+          //50d = Yellow pulse to red/purple
           //15n = off
 //771 & 781 - Extreme weather, flash red
 //611-616 - sleet/rain = blue white pulse
