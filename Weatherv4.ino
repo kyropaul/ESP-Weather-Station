@@ -61,7 +61,7 @@ String lonCode="";
 String apiKey="";
 
 unsigned long lastConnectionTime = 10 * 60 * 1000;     // last time you connected to the server, in milliseconds
-const unsigned long postInterval = 3 * 60 * 1000;  // posting interval of 10 minutes  (10L * 1000L; 10 seconds delay for testing)
+const unsigned long postInterval = 5 * 60 * 1000;  // posting interval of 10 minutes  (10L * 1000L; 10 seconds delay for testing)
 
 WiFiClient wifiClient;
 
@@ -190,7 +190,21 @@ void loop() {   //main program
               Serial.print("API = ");
               Serial.println(SetAPI);
               writeFile(LittleFS, "/api.txt", SetAPI); //save to api.txt
+            } else if (header.indexOf("GET /override") >= 0){
+              iconNow = header.substring(14,17);
+              weatherDesc = "Override";
+              Serial.print("Override Condition: ");
+              Serial.println(iconNow);
+            } else if (header.indexOf("GET /Tornado") >=0){
+              weatherNow=771;
+              weatherDesc = "Override";
+              Serial.println("override : Tornado");
+            } else if (header.indexOf("GET /freezing") >= 0) { 
+              weatherNow=611;
+              weatherDesc = "Override";
+              Serial.println("override : Freezing Rain");
             } else { Serial.println("No Data");}
+            
             // Display the HTML web page
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
@@ -228,6 +242,27 @@ void loop() {   //main program
             client.println("\"><br><br>");
             client.println("<input type=\"submit\" value=\"Submit\">");
             client.println("</form>");
+            client.println("<h2>Override Weather</h2><p>These buttons can be used to override the weather unit, settings will reset after next api call cycle (up to 5 minutes)</p>");
+            client.println("<table style=\"margin-left:auto;margin-right:auto\"><caption><h3>Icon list</h3><tr><th>Day icon</th><th>Night icon</th><th>Description</th></tr><tr>");
+            client.println("<td>01d.png<a href=\"/override?01d\"><img src=\"http://openweathermap.org/img/wn/01d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>01n.png<a href=\"/override?01d\"><img src=\"http://openweathermap.org/img/wn/01n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> clear sky</td></tr><tr>");
+            client.println("<td>02d.png<a href=\"/override?02d\"><img src=\"http://openweathermap.org/img/wn/02d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>02n.png<a href=\"/override?02n\"><img src=\"http://openweathermap.org/img/wn/02n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> few clouds </td></tr><tr>");
+            client.println("<td>03d.png<a href=\"/override?03d\"><img src=\"http://openweathermap.org/img/wn/03d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>03n.png<a href=\"/override?03n\"><img src=\"http://openweathermap.org/img/wn/03n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> scattered clouds </td></tr><tr>");
+            client.println("<td>04d.png<a href=\"/override?04d\"><img src=\"http://openweathermap.org/img/wn/04d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>04n.png<a href=\"/override?04n\"><img src=\"http://openweathermap.org/img/wn/04n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> broken clouds </td></tr><tr>");
+            client.println("<td>09d.png<a href=\"/override?09d\"><img src=\"http://openweathermap.org/img/wn/09d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>09n.png<a href=\"/override?09n\"><img src=\"http://openweathermap.org/img/wn/09n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> shower rain </td></tr><tr>");
+            client.println("<td>10d.png<a href=\"/override?10d\"><img src=\"http://openweathermap.org/img/wn/10d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>10n.png<a href=\"/override?10n\"><img src=\"http://openweathermap.org/img/wn/10n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> rain </td></tr><tr>");
+            client.println("<td>11d.png<a href=\"/override?11d\"><img src=\"http://openweathermap.org/img/wn/11d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>11n.png<a href=\"/override?11n\"><img src=\"http://openweathermap.org/img/wn/11n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> thunderstorm </td></tr><tr>");
+            client.println("<td>13d.png<a href=\"/override?13d\"><img src=\"http://openweathermap.org/img/wn/13d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>13n.png<a href=\"/override?13n\"><img src=\"http://openweathermap.org/img/wn/13n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> snow </td></tr><tr>");
+            client.println("<td>50d.png<a href=\"/override?50d\"><img src=\"http://openweathermap.org/img/wn/50d@2x.png\" width=\"50px\" height=\"50px\"/></a></td>");
+            client.println("<td>50n.png<a href=\"/override?50n\"><img src=\"http://openweathermap.org/img/wn/50n@2x.png\" width=\"50px\" height=\"50px\"/></a></td><td> mist </td></tr>");
+            client.println("<tr><td><a href=\"/Tornado\">Tornado Warning</a></td><td><a href=\"/freezing\">Freezing Rain Warning</a></td><td></td></tr></table>");
             client.println("</body></html>");
             client.println();
             // Break out of the while loop
@@ -301,6 +336,7 @@ void loop() {   //main program
   //override weather for testing
   //weatherNow = 771;
   //iconNow = "50d";
+  Serial.println(iconNow);
   //for MOST conditions I used the icon to determinw what to display, origninally I was using the condition code but it was too confusing to understand that the flashing speed related to amount of rain fall.
   if (weatherNow ==771 || weatherNow == 781 ){
     //Tornado just flashes red on and off
@@ -404,7 +440,7 @@ void Thunder(){  //lightening holds blue for 10 sec then does 2 very quick flash
     analogWrite(RED,0);
     analogWrite(GREEN,0);
     analogWrite(BLUE,500); 
-    delay(10000);
+    delay(5000);
     analogWrite(RED,50);
     analogWrite(GREEN,50);
     analogWrite(BLUE,500); 
@@ -560,7 +596,7 @@ void BWPulse(){  //pulsing from blue to bright white
           //13d = white pulse
           //13n = white pulse
 //50d / 50n - mist/fog
-          //50d = Yellow pulse to red/purple
+          //50d = grey
           //15n = off
 //771 & 781 - Extreme weather, flash red
 //611-616 - sleet/rain = blue white pulse
