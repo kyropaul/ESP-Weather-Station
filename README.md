@@ -1,5 +1,6 @@
 # ESP-Weather-Station
 ESP Weather Station
+![ESP Weather Station](https://github.com/kyropaul/ESP-Weather-Station/blob/main/videos/Assembled.jpg?raw=true)
 ## Overview
 I wanted a simple weather station that can be visible across a room and give you a general idea of if it's raining or nice outside.
 When looking for examples I found that many existing versions used old and depreciated code (i.e. arduninoJson v5), and that openweather api caused inconsistant performance due to memory issues.
@@ -15,6 +16,7 @@ Because this project does not use an aSync webserver the settings page may be un
 Note: the 3d model provided is very tight for this project so I recommend soldering the resistor and LED to the board and not using wires between everything.
 Connect the LED through the resistor to Red=D6, Green=D7, Blue=D8.
 Connect the common cathode to ground.
+![Schematic](https://github.com/kyropaul/ESP-Weather-Station/blob/main/schematic.png?raw=true)
 ## Operation
 After you load the code onto the ESP it will create an access point called AutoConnectAP (see documentation here https://github.com/tzapu/WiFiManager, you will need to download this repo).
 When the ESP connects to the wifi the LED will flash to indicate what the IP address is (it will flash for the last byte red is digit 1, green is digit 2, blue is digit 3). You will need to know your subnet mask. For example if your router is on subnet 192.168.0.0 and the IP address is 192.168.0.123 you will see 1 red, flash, 2 green and 3 blue.
